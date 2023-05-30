@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.fruitfruit.category.CategoryMapper"> <!-- CategoryMapper 인터페이스에 정의된 메서드와 매핑, 해당 메서드를 호출할 때 실행 -->
+   <resultMap type="com.project.fruitfruit.category.Category" id="category"> <!-- 반환 클래스를 지정하며 이 resultMap의 id를 작성 -->
+      <result property="cate_num" column="cate_num"/> <!-- SQL 질의 결과에서 가져온 컬럼 값을 매핑 대상 클래스의 필드에 설정 -->
+      <result property="cate_name" column="cate_name"/>
+      <result property="cate_parent_num" column="cate_parent_num"/>
+   </resultMap>
+   
+    <insert id="insertCategory1" parameterType="com.project.fruitfruit.category.Category">
+      INSERT   INTO category1 
+      VALUES   (seq_category1.nextval, #{cate_name})
+   </insert>
+   
+   <insert id="insertCategory2" parameterType="com.project.fruitfruit.category.Category">
+      INSERT   INTO category2 
+      VALUES   (seq_category2.nextval, #{cate_name}, #{cate_parent_num})
+   </insert>
+
+   
+   <select id="selectCategory1" resultMap="category" parameterType="int">
+      SELECT   	* 
+      FROM   	category1 
+      WHERE   	cate_num = #{cate_num}
+      ORDER BY cate_num
+   </select>
+   
+   <select id="selectCategory2" resultMap="category" parameterType="int">
+      SELECT   	* 
+      FROM   	category2 
+      WHERE   	cate_num = #{cate_num}
+      ORDER BY cate_num
+   </select>
+   
+   <!-- 대분류 카테고리 가져오기 -->
+   <select id="selectAllCategory1" resultMap="category">
+      SELECT   	* 
+      FROM   	category1
+	  ORDER BY  cate_num
+   </select>
+   
+   <select id="selectAllCategory2" resultMap="category" parameterType="int">
+      SELECT   	* 
+      FROM   	category2 
+      WHERE   	cate_parent_num = #{cate_parent_num}
+	  ORDER BY  cate_num
+   </select>
+   
+   <select id="Category2All" resultMap="category">
+      SELECT   	* 
+      FROM   	category2   
+	  ORDER BY  cate_num
+   </select>
+
+   <delete id="deleteCategory1" parameterType="int">
+      DELETE   FROM category1 
+      WHERE		cate_num = #{cate_num}
+   </delete>   
+   
+   <delete id="deleteCategory2" parameterType="int">
+      DELETE   FROM category2 
+      WHERE   	cate_num = #{cate_num}
+   </delete>   
+   
+   <select id="getNum1" resultType="int">
+      SELECT   seq_category1.currval
+      FROM   	dual
+   </select>
+   
+   <select id="getNum2" resultType="int">
+      SELECT   seq_category2.currval
+      FROM   	dual
+   </select>
+</mapper>
