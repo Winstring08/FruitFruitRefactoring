@@ -22,14 +22,14 @@
 
             //아이디 유효성 검사
             $(".id_check_btn").click(function () {
-                $.get("/member/idCheck", { user_id: $("#user_id").val() })
-                    .done(function (data) {
-                        $(".id_check_text").text(data.result);
+                $.get("/member/idCheck", { user_id: $("#user_id").val().trim() })
+                    .done(function (data) { //문구확인 String 
+                        $(".id_check_text").text(data);
                     });
             });
 
             //회원가입 유효성 검사
-            $("#join").click(function () {
+            $("#join").click(function () { //가입버튼을 눌렀을때
                 if ( $(".id_check_text").text() == "사용 가능한 이메일입니다" ) { //중복확인 검사
                     if ($("#user_postcode").val() == "" || $("#user_addr1").val() == "") { //readonly와 required를 함께 사용할 수 없기 떄문에 작성
                         alert("주소를 입력해주세요");

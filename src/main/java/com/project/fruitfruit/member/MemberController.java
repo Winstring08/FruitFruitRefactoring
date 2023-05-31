@@ -38,11 +38,10 @@ public String joinForm() {
 	return path;
 }
 
-@SuppressWarnings("unchecked")
+//회원가입 아이디 유효성 검사
 @GetMapping(value = "/member/idCheck")
 @ResponseBody
-public JSONObject idCheck(String user_id) {
-	JSONObject jsonObject = new JSONObject();
+public String idCheck(String user_id) {
 	String result = "";
 	Member m = service.select(user_id); //해당하는 아이디로 등록된 회원이 있는지 조회
 	if (m != null) { //회원이 이미 존재
@@ -55,9 +54,9 @@ public JSONObject idCheck(String user_id) {
 		result = "사용 가능한 이메일입니다";
 	}
 	
-	jsonObject.put("result", result);
-	return jsonObject;
+	return result;
 }
+
 
 @PostMapping(value = "/member/joinForm")//회원가입 하기
 public String join(Member m) {
@@ -74,25 +73,24 @@ public String loginForm() {
 		return path;
 }
 
-@SuppressWarnings("unchecked")
-@PostMapping(value = "/member/loginChk") //로그인 계정 확인
+//로그인 유효성 검사
+@PostMapping(value = "/member/loginChk") 
 @ResponseBody
-public JSONObject loginChk(String user_id, String user_pwd) {
-	JSONObject jsonObject = new JSONObject();
+public String loginChk(String user_id, String user_pwd) {
 	Member m = service.select(user_id);
+	String response = "";
 	if(user_id.equals("") || user_pwd.equals("")){
-		jsonObject.put("res", "empty");
+		response = "empty";
 	}else if (m == null || !m.getUser_pwd().equals(user_pwd)) {
-		jsonObject.put("res", "fail");
+		response = "fail";
 	}
-	return jsonObject;
+	return response;
 }
 
 @PostMapping(value = "/member/login") //로그인 하기
 public String login(String user_id, String user_pwd) {
 	String path = "redirect:/";				
 	Member m = service.select(user_id);
-	System.out.println("회원로그인 : " + m );
 		if(session != null) {
 			session.setAttribute("user_id", m.getUser_id());
 			session.setAttribute("user_type", m.getUser_type());
@@ -104,7 +102,6 @@ public String login(String user_id, String user_pwd) {
 @GetMapping(value = "/member/logout") //로그아웃하기
 public String logout() {
 	String id = (String) session.getAttribute("user_id");
-	System.out.println(id + " 로그아웃");
 	session.removeAttribute("user_id");
 	session.invalidate();
 	return "redirect:/";

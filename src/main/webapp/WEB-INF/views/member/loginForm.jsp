@@ -71,19 +71,19 @@
        	
 	       	/* 로그인 하기 */
             $("#login_btn").click(function () {
-                if ($("#user_id").val() == "") {
+                if ($("#user_id").val().trim() == "") {
                     $("#msg").html("이메일을 입력해주세요.");
-                } else if ($("#user_pwd").val() == "") {
+                } else if ($("#user_pwd").val().trim() == "") {
                 	$("#msg").html("패스워드를 입력해주세요."); ;
                 } else {
-                    var user_id = $("#user_id").val();
-                    var user_pwd = $("#user_pwd").val();
+                    var user_id = $("#user_id").val().trim();
+                    var user_pwd = $("#user_pwd").val().trim();
                     $.ajax({
                         url: "/member/loginChk",
                         type: "post",
                         data: { user_id, user_pwd },
                         success: function (data) {
-                            if (data.res == "fail") {
+                            if (data == "fail") {
                             	$("#msg").html("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.");
                             } else {
                                 $("form").submit();
